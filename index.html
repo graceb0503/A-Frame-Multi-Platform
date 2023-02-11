@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html>
+    <head>
+      <title>Welcome! Entering the forest...</title>
+      <meta name="description" content="Welcome! Entering the forest...">
+      <script src="https://aframe.io/releases/1.4.1/aframe.min.js"></script>
+      <script src="https://unpkg.com/aframe-environment-component/dist/aframe-environment-component.min.js"></script>
+      <script src="https://unpkg.com/aframe-animation-component@3.2.1/dist/aframe-animation-component.min.js"></script>
+      <script src="https://cdn.jsdelivr.net/gh/n5ro/aframe-physics-system@v4.0.1/dist/aframe-physics-system.min.js"></script>
+      <script src="js/create-custom-component.js"></script>
+      <script src="js/delete-custom-component.js"></script>
+      <script src="js/move-acorn.js"></script>
+</head>
+
+    <body>
+      <a-scene renderer="antialias:true; colorManagement:true;">
+
+        <a-assets timeout="10000">
+        <a-asset-item id="duck_model" src="assets/Duck.glb" response-type="arraybuffer"></a-asset-item>
+        <a-asset-item id="acorn_model" src="assets/Acorn.glb" response-type="arraybuffer"></a-asset-item>
+        <img id="stone_texture" src="assets/stone.jpg" crossorigin="anonymous">
+        <img id="water_texture" src="assets/water.jpg" crossorigin="anonymous">
+        <audio id="forest_music" src="assets/forest_music.mp3" preload="auto" crossorigin="anonymous"></audio>
+        <audio id="duck_soundEffect" src="assets/duck_sound.mp3" preload="auto" crossorigin="anonymous"></audio>
+        </a-assets>
+
+        <a-entity environment="preset: forest; dressingAmount: 500"></a-entity> 
+        
+        <a-entity id="camera_main" position="0 3 0" camera wasd-controls look-controls></a-entity> 
+
+        <a-entity cursor="rayOrigin:mouse"></a-entity>
+
+        <a-entity sound="src:#forest_music; autoplay:true; loop:true;"></a-entity> <!-- will play once a duck is clicked -->
+        
+        <a-entity id="ducks">
+        <a-entity class="duck" gltf-model="#duck_model" position="4.5 0.3 -4.5" scale="1.5 1.5 1.5" animation="property: position; easing: easeInOutQuad; dir: alternate; dur: 20000; to: 8 0.3 -1; loop: true"
+                  animation__enter="startEvents: mouseenter; property: scale; to: 2 2 2; dur: 800" animation__leave="startEvents: mouseleave; property: scale; to: 1.5 1.5 1.5; dur: 800"
+                  sound="src:#duck_soundEffect; on:click"></a-entity>
+        <a-entity class="duck" gltf-model="#duck_model" position="8 0.3 -7" scale="1.5 1.5 1.5" animation="property: position; easing: easeInOutQuad; dir: alternate; dur: 25000; to: 4 0.3 -1; loop: true"
+                  animation__enter="startEvents: mouseenter; property: scale; to: 2 2 2; dur: 800" animation__leave="startEvents: mouseleave; property: scale; to: 1.5 1.5 1.5; dur: 800"
+                  sound="src:#duck_soundEffect; on:click"></a-entity>
+        <a-entity class="duck" gltf-model="#duck_model" position="12 0.3 -5.5" scale="1.5 1.5 1.5" animation="property: position; easing: easeInOutQuad; dir: alternate; dur: 25000; to: 13.5 0.3 -3; loop: true"
+                  animation__enter="startEvents: mouseenter; property: scale; to: 2 2 2; dur: 800" animation__leave="startEvents: mouseleave; property: scale; to: 1.5 1.5 1.5; dur: 800"
+                  sound="src:#duck_soundEffect; on:click"></a-entity>
+        </a-entity>
+
+        <a-entity id="acorns">
+          <a-entity class="acorn" gltf-model="#acorn_model" position="16 0 4" scale="40 40 40" animation="startEvents: click; property: position; from: -2.3 1 0.5; to: -2.3 0 0.5 dur: 500"> </a-entity>
+          <a-entity class="acorn" gltf-model="#acorn_model" position="14 0 4" scale="40 40 40" animation="startEvents: click; property: position; from: -5 1 2; to: -5 0 2 dur: 500"> </a-entity>
+          <a-entity class="acorn" gltf-model="#acorn_model" position="14 0 5" scale="40 40 40" animation="startEvents: click; property: position; from: 4 1 5; to: 4 0 5 dur: 500"> </a-entity>
+          <a-entity class="acorn" gltf-model="#acorn_model" position="15 0 3" scale="40 40 40" animation="startEvents: click; property: position; from: -4 1 0; to: -4 0 0 dur: 500"> </a-entity>
+          <a-entity class="acorn" gltf-model="#acorn_model" position="13 0 4" scale="40 40 40" animation="startEvents: click; property: position; from: 2 1 4; to: 2 0 4 dur: 500"> </a-entity>
+        </a-entity>   
+
+        <a-entity id="acorn_button">
+          <a-entity class="button interactive" create-custom-component="" position="0 0.6 0" geometry="primitive:cylinder; radius:0.15; height:0.2;" material="color:rgb(255, 100, 100)"
+                    animation__mouseenter="property:material.color; type:color; to:rgb(255, 0, 0); startEvents:mouseenter; dur:30"
+                    animation__mouseleave="property:material.color; type:color; to:rgb(255, 100, 100); startEvents:mouseleave; dur:30"
+                    animation__click="property:position.y; from:0.55; to:0.6; startEvents:click; dur:100" shadow></a-entity>
+
+          <a-entity position="0 0.3 0" geometry="primitive:box; width:0.5; depth:0.5; height:0.6;" material="color:rgb(255, 255, 255)" shadow></a-entity>
+        </a-entity>
+
+        <a-entity id="button_sign" position="-1 0.2 0.2" rotation="-30 0 0">
+          <a-entity position="0 0 -0.11" geometry="primitive:box; width:1.4; height:0.4; depth:0.1;" material="color:white;"> </a-entity>
+          <a-entity position="-0.6 0.06 0.01" text="value:More Acorns!; color:black; font:roboto; width:2; anchor:left; baseline:top; wrapCount:18;"> </a-entity> 
+        </a-entity>
+
+        <a-entity id="pond"
+                  position="8 0 -6"
+                  geometry="primitive:cylinder; radius:8.0;"
+                  material="src:#water_texture">
+        </a-entity>
+
+        <a-entity id="rock1"
+                  position="0 0 -5"
+                  geometry="primitive:sphere; radius:1.0;"
+                  material="src:#stone_texture">
+        </a-entity>
+        <a-entity id="rock2"
+                  position="0 0 -3.5"
+                  geometry="primitive:sphere; radius:1.0;"
+                  material="src:#stone_texture">
+        </a-entity>
+        <a-entity id="rock3"
+                  position="0.5 0 -2"
+                  geometry="primitive:sphere; radius:1.0;"
+                  material="src:#stone_texture">
+        </a-entity>
+        <a-entity id="rock4"
+                  position="1.5 0 -0.8"
+                  geometry="primitive:sphere; radius:1.0;"
+                  material="src:#stone_texture">
+        </a-entity>
+        <a-entity id="rock5"
+                  position="2.5 0 0.3"
+                  geometry="primitive:sphere; radius:1.0;"
+                  material="src:#stone_texture">
+        </a-entity>
+        <a-entity id="rock6"
+                  position="3.6 0 1.1"
+                  geometry="primitive:sphere; radius:1.0;"
+                  material="src:#stone_texture">
+        </a-entity>
+        <a-entity id="rock7"
+                  position="5.0 0 1.7"
+                  geometry="primitive:sphere; radius:1.0;"
+                  material="src:#stone_texture">
+        </a-entity>
+        <a-entity id="rock8"
+                  position="6.5 0 1.9"
+                  geometry="primitive:sphere; radius:1.0;"
+                  material="src:#stone_texture">
+        </a-entity>
+        <a-entity id="rock9"
+                  position="8.1 0 2.0"
+                  geometry="primitive:sphere; radius:1.0;"
+                  material="src:#stone_texture">
+        </a-entity>
+        <a-entity id="rock10"
+                  position="9.6 0 1.8"
+                  geometry="primitive:sphere; radius:1.0;"
+                  material="src:#stone_texture">
+        </a-entity>
+        <a-entity id="rock11"
+                  position="11.1 0 1.4"
+                  geometry="primitive:sphere; radius:1.0;"
+                  material="src:#stone_texture">
+        </a-entity>
+        <a-entity id="rock12"
+                  position="12.6 0 0.9"
+                  geometry="primitive:sphere; radius:1.0;"
+                  material="src:#stone_texture">
+        </a-entity>
+        <a-entity id="rock13"
+                  position="13.8 0 0.0"
+                  geometry="primitive:sphere; radius:1.0;"
+                  material="src:#stone_texture">
+        </a-entity>
+        <a-entity id="rock14"
+                  position="14.8 0 -0.9"
+                  geometry="primitive:sphere; radius:1.0;"
+                  material="src:#stone_texture">
+        </a-entity>
+        <a-entity id="rock15"
+                  position="15.4 0 -2.2"
+                  geometry="primitive:sphere; radius:1.0;"
+                  material="src:#stone_texture">
+        </a-entity>
+        <a-entity id="rock16"
+                  position="15.7 0 -3.6"
+                  geometry="primitive:sphere; radius:1.0;"
+                  material="src:#stone_texture">
+        </a-entity>
+        <a-entity id="rock17"
+                  position="15.9 0 -5.0"
+                  geometry="primitive:sphere; radius:1.0;"
+                  material="src:#stone_texture">
+        </a-entity>
+        <a-entity id="rock18"
+                  position="15.8 0 -6.4"
+                  geometry="primitive:sphere; radius:1.0;"
+                  material="src:#stone_texture">
+        </a-entity>
+        <a-entity id="rock19"
+                  position="15.6 0 -7.7"
+                  geometry="primitive:sphere; radius:1.0;"
+                  material="src:#stone_texture">
+        </a-entity>
+        <a-entity id="rock20"
+                  position="15.4 0 -9.0"
+                  geometry="primitive:sphere; radius:1.0;"
+                  material="src:#stone_texture">
+        </a-entity>
+        <a-entity id="rock21"
+                  position="14.7 0 -10.3"
+                  geometry="primitive:sphere; radius:1.0;"
+                  material="src:#stone_texture">
+        </a-entity>
+        <a-entity id="rock22"
+                  position="14 0 -11.3"
+                  geometry="primitive:sphere; radius:1.0;"
+                  material="src:#stone_texture">
+        </a-entity>
+        <a-entity id="rock23"
+                  position="12.8 0 -12.1"
+                  geometry="primitive:sphere; radius:1.0;"
+                  material="src:#stone_texture">
+        </a-entity>
+        <a-entity id="rock24"
+                  position="11.8 0 -12.8"
+                  geometry="primitive:sphere; radius:1.0;"
+                  material="src:#stone_texture">
+        </a-entity>
+        <a-entity id="rock25"
+                  position="10.5 0 -13.5"
+                  geometry="primitive:sphere; radius:1.0;"
+                  material="src:#stone_texture">
+        </a-entity>
+        <a-entity id="rock26"
+                  position="9.2 0 -13.9"
+                  geometry="primitive:sphere; radius:1.0;"
+                  material="src:#stone_texture">
+        </a-entity>
+        <a-entity id="rock27"
+                  position="7.7 0 -14.2"
+                  geometry="primitive:sphere; radius:1.0;"
+                  material="src:#stone_texture">
+        </a-entity>
+        <a-entity id="rock28"
+                  position="6.2 0 -14.0"
+                  geometry="primitive:sphere; radius:1.0;"
+                  material="src:#stone_texture">
+        </a-entity>
+        <a-entity id="rock29"
+                  position="4.9 0 -13.5"
+                  geometry="primitive:sphere; radius:1.0;"
+                  material="src:#stone_texture">
+        </a-entity>
+        <a-entity id="rock30"
+                  position="3.6 0 -13.0"
+                  geometry="primitive:sphere; radius:1.0;"
+                  material="src:#stone_texture">
+        </a-entity>
+        <a-entity id="rock31"
+                  position="2.5 0 -12.3"
+                  geometry="primitive:sphere; radius:1.0;"
+                  material="src:#stone_texture">
+        </a-entity>
+        <a-entity id="rock32"
+                  position="1.5 0 -11.3"
+                  geometry="primitive:sphere; radius:1.0;"
+                  material="src:#stone_texture">
+        </a-entity>
+        <a-entity id="rock33"
+                  position="0.9 0 -10"
+                  geometry="primitive:sphere; radius:1.0;"
+                  material="src:#stone_texture">
+        </a-entity>
+        <a-entity id="rock34"
+                  position="0.4 0 -8.7"
+                  geometry="primitive:sphere; radius:1.0;"
+                  material="src:#stone_texture">
+        </a-entity>
+        <a-entity id="rock35"
+                  position="0 0 -7.7"
+                  geometry="primitive:sphere; radius:1.0;"
+                  material="src:#stone_texture">
+        </a-entity>
+        <a-entity id="rock36"
+                  position="-0.1 0 -6.6"
+                  geometry="primitive:sphere; radius:1.0;"
+                  material="src:#stone_texture">
+        </a-entity>
+      </a-scene>
+
+    </body>
+</html>
